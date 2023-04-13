@@ -4,6 +4,29 @@ if oh then
     oh.Exit()
 end
 
+local Remotes = {}
+local NetworkEnvironment = getmenv(rawget(rawget(require(game.ReplicatedStorage.Framework.Nevermore), '_lookupTable'), 'Network'))
+local EventsTable = debug.getupvalue(NetworkEnvironment.GetEventHandler, 1)
+local FunctionsTable = debug.getupvalue(NetworkEnvironment.GetFunctionHandler, 1)
+for Name, Info in pairs(EventsTable) do
+    if rawget(Info, "Remote") then
+        Remotes[rawget(Info, "Remote")] = Name
+    end
+end
+for Name, Info in pairs(FunctionsTable) do
+    if rawget(Info, "Remote") then
+        Remotes[rawget(Info, "Remote")] = Name
+    end
+end
+local Index
+Index = hookmetamethod(game, "__index", function(Self, Key)
+    if checkcaller() and (Key == 'Name' or Key == "name") and Remotes[Self] then
+        return Remotes[Self]
+    end
+
+   return Index(Self, Key)
+end)
+
 local web = true
 local user = "kkeyy-hash" -- change if you're using a fork
 local branch = "revision"
