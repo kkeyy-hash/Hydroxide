@@ -122,6 +122,14 @@ local remoteLogsMenu = ContextMenu.new({ scriptContext, callingScriptContext, sp
 local remoteConditionMenu = ContextMenu.new({ removeConditionContext })
 local remoteConditionMenuSelected = ContextMenu.new({ removeConditionContextSelected })
 
+local clientBlock = {
+    ReplicateBodyRotation = true,
+    BAC = true,
+    ExportClientErrors = true,
+    ReportAverageFps = true,
+    RemoteEvent = true
+}
+
 local function checkCurrentIgnored()
     local selectedRemote = (selected.remoteLog or selected.logContext).Remote
 
@@ -289,6 +297,12 @@ function Log.new(remote)
     button.Name = remoteInstanceName
     button.Label.Text = remoteInstanceName
     button.Icon.Image = icons[remoteClassName]
+    
+    if clientBlock[remoteInstanceName] then
+        selected.remoteLog = log
+        selected.remoteLog.Ignored = true
+        checkCurrentIgnored()
+    end
 
     local function viewLogs()
         if selected.remoteLog then
