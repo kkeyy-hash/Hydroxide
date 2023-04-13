@@ -5,7 +5,7 @@ if oh then
 end
 
 local web = true
-local user = "Upbolt" -- change if you're using a fork
+local user = "kkeyy-hash" -- change if you're using a fork
 local branch = "revision"
 local importCache = {}
 
@@ -191,7 +191,7 @@ if readFile and writeFile then
     local hasFolderFunctions = (isFolder and makeFolder) ~= nil
     local ran, result = pcall(readFile, "__oh_version.txt")
 
-    if not ran or releaseInfo.tag_name ~= result then
+    if not ran then
         if hasFolderFunctions then
             local function createFolder(path)
                 if not isFolder(path) then
@@ -251,7 +251,7 @@ if readFile and writeFile then
         end
 
         writeFile("__oh_version.txt", releaseInfo.tag_name)
-    elseif ran and releaseInfo.tag_name == result then
+    elseif ran then
         function environment.import(asset)
             if importCache[asset] then
                 return unpack(importCache[asset])
