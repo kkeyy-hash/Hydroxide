@@ -35,14 +35,6 @@ local methodHooks = {
     BindableFunction = Instance.new("BindableFunction").Invoke
 }
 
-local blocklist = {
-    ReplicateBodyRotation = true,
-    BAC = true,
-    ExportClientErrors = true,
-    ReportAverageFps = true,
-    RemoteEvent = true
-}
-
 local currentRemotes = {}
 
 local remoteDataEvent = Instance.new("BindableEvent")
