@@ -35,6 +35,14 @@ local methodHooks = {
     BindableFunction = Instance.new("BindableFunction").Invoke
 }
 
+local blocklist = {
+    ReplicateBodyRotation = true,
+    BAC = true,
+    ExportClientErrors = true,
+    ReportAverageFps = true,
+    RemoteEvent = true
+}
+
 local currentRemotes = {}
 
 local remoteDataEvent = Instance.new("BindableEvent")
@@ -64,7 +72,7 @@ nmcTrampoline = hookMetaMethod(game, "__namecall", function(...)
         method = "InvokeServer"
     end
         
-    if remotesViewing[instance.ClassName] and instance ~= remoteDataEvent and remoteMethods[method] then
+    if remotesViewing[instance.ClassName] and not blocklist[instance.Name] and instance ~= remoteDataEvent and remoteMethods[method] then
         local remote = currentRemotes[instance]
         local vargs = {select(2, ...)}
             
@@ -119,7 +127,7 @@ for _name, hook in pairs(methodHooks) do
             if (not success) then return originalMethod(...) end
         end
 
-        if instance.ClassName == _name and remotesViewing[instance.ClassName] and instance ~= remoteDataEvent then
+        if instance.ClassName == _name and instant.Name ~= "RemoteEvent" and remotesViewing[instance.ClassName] and instance ~= remoteDataEvent then
             local remote = currentRemotes[instance]
             local vargs = {select(2, ...)}
 
